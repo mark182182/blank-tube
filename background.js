@@ -1,15 +1,13 @@
 function removeRecommendatations(tab, deleted) {
-  function deleteNode(id, selector, isPageActive, canDeleteParent) {
+  function deleteNode(id, selector, isPageActive, parentIndexToDelete) {
     if (isPageActive) {
       const node = document.querySelector(selector);
       if (node) {
-        if (canDeleteParent) {
-          node.parentElement.parentElement.removeChild(node.parentElement);
-        } else {
-          node.parentElement.removeChild(node);
+        let parent = node;
+        for (let i = 0; i < parentIndexToDelete; i++) {
+          parent = parent.parentElement;
         }
-        console.log(document.querySelector(selector));
-        console.log(node.childNodes);
+        parent.parentElement.removeChild(parent);
         deleted[id] = { id, state: true };
       };
       if (!deleted[id]) {
@@ -21,11 +19,11 @@ function removeRecommendatations(tab, deleted) {
   }
 
   const timer = setInterval(() => {
-    deleteNode(0, 'ytd-page-manager ytd-browse ytd-two-column-browse-results-renderer div ytd-rich-grid-renderer #contents', tab.url.endsWith('youtube.com/'), false);
-    deleteNode(1, '.style-scope .ytd-watch-next-secondary-results-renderer', tab.url.includes('watch?v='), false);
-    deleteNode(2, 'ytd-comment-thread-renderer', tab.url.includes('watch?v='), true);
-    deleteNode(3, '.style-scope .ytd-section-list-renderer ytd-item-section-renderer', tab.url.includes('feed/explore'), true);
-    deleteNode(4, '.ytp-endscreen-content', tab.url.includes('watch?v='), false);
+    deleteNode(0, 'ytd-page-manager ytd-browse ytd-two-column-browse-results-renderer div ytd-rich-grid-renderer #contents', tab.url.endsWith('youtube.com/'), 2);
+    deleteNode(1, '.style-scope .ytd-watch-next-secondary-results-renderer', tab.url.includes('watch?v='), 1);
+    deleteNode(2, 'ytd-comment-thread-renderer', tab.url.includes('watch?v='), 2);
+    deleteNode(3, '#destination-buttons', tab.url.includes('feed/explore'), 4);
+    deleteNode(4, '.ytp-endscreen-content', tab.url.includes('watch?v='), 1);
     if (deleted.every(node => node.state === true || node.state === null)) {
       console.log("cleared all annoyances");
       console.log(deleted);
