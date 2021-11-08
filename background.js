@@ -25,6 +25,7 @@ function removeRecommendatations(tab, deleted) {
     deleteNode(1, '.style-scope .ytd-watch-next-secondary-results-renderer', tab.url.includes('watch?v='), false);
     deleteNode(2, 'ytd-comment-thread-renderer', tab.url.includes('watch?v='), true);
     deleteNode(3, '.style-scope .ytd-section-list-renderer ytd-item-section-renderer', tab.url.includes('feed/explore'), true);
+    deleteNode(4, '.ytp-endscreen-content', tab.url.includes('watch?v='), false);
     if (deleted.every(node => node.state === true || node.state === null)) {
       console.log("cleared all annoyances");
       console.log(deleted);
